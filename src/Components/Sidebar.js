@@ -1,17 +1,29 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { IoClose } from "react-icons/io5";
+
 import avatar from "../../public/image/avatar.png";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const [isOpenSubMenu, setIsOpenSubMenu] = useState(false);
+  const [isOpenSubMenu, setIsOpenSubMenu] = useState({
+    myOrder: false,
+    offer: false,
+    performer: false,
+    myContact: false,
+    myBalance: false,
+  });
 
-  const toggleSubMenu = () => {
-    setIsOpenSubMenu(!isOpenSubMenu);
+  const toggleSubMenu = (subMenuName) => {
+    setIsOpenSubMenu((prevState) => ({
+      ...prevState,
+      [subMenuName]: !prevState[subMenuName],
+    }));
   };
+
   return (
     <aside
-      className={`fixed top-0 left-0 w-80 min-w-[260px] h-full bg-white border-r border-gray-300 transform transition-transform md:relative md:translate-x-0 ${
+      className={`fixed top-0 left-0 w-80 min-w-[260px] h-full bg-sidebar-primary transform transition-transform md:relative md:translate-x-0 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } md:col-start-1 md:row-start-1 md:row-end-3`}
     >
@@ -33,30 +45,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 <p className="text-sm font-normal text-gray-500">@khabylame</p>
               </div>
             </div>
-            <button
-              className="flex w-10 h-10 justify-center items-center cursor-pointer rounded bg-white shadow-md"
+
+            <IoClose
+              className="cursor-pointer text-sidebar-textprimary text-2xl md:hidden"
               onClick={toggleSidebar}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="mdi:menu-open">
-                  <path
-                    id="Vector"
-                    d="M21 15.61L19.59 17L14.58 12L19.59 7L21 8.39L17.44 12L21 15.61ZM3 6H16V8H3V6ZM3 13V11H13V13H3ZM3 18V16H16V18H3Z"
-                    fill="#0B0D23"
-                  />
-                </g>
-              </svg>
-            </button>
+            />
           </div>
 
           <div className="flex flex-col gap-2">
-            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100 cursor-pointer bg-purple-600 text-white">
+            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100 cursor-pointer bg-sidebar-secondary text-sidebar-primary">
               <div className="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +83,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </svg>
             </button>
 
-            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100 bg-white text-purple-500 cursor-pointer">
+            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100  text-sidebar-secondary cursor-pointer">
               <div className="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +116,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </svg>
             </button>
 
-            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100 bg-white text-purple-500 cursor-pointer">
+            <button className="flex w-[272px] h-14 px-4 py-3.5 justify-between items-center rounded-lg border border-purple-100  text-sidebar-secondary cursor-pointer">
               <div className="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -155,10 +152,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
         <div className="flex flex-col gap-2">
           <span className="text-gray-500 text-sm font-medium pb-2">Orders</span>
-          <div className="relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 bg-white transition-all duration-500">
+          <div
+            className={`relative flex flex-col items-center w-[272px] font-medium border border-gray-300 rounded-lg px-4 text-sidebar-textprimary transition-all duration-500 ${
+              isOpenSubMenu.myOrder ? "pb-[15px]" : ""
+            }`}
+          >
             <button
-              className="flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer"
-              onClick={toggleSubMenu}
+              className={`flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer ${
+                isOpenSubMenu.myOrder ? "border-b" : ""
+              }`}
+              onClick={() => toggleSubMenu("myOrder")}
             >
               <div className="flex items-center gap-3">
                 <svg
@@ -177,7 +180,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
               <svg
                 className={`transition-transform duration-500 ${
-                  isOpenSubMenu ? "rotate-180" : ""
+                  isOpenSubMenu.myOrder ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -193,16 +196,22 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </button>
             <div
               className={`overflow-hidden transition-all duration-500 ${
-                isOpenSubMenu ? "h-auto" : "h-0"
+                isOpenSubMenu.myOrder ? "h-auto" : "h-0"
               }`}
             >
               <p className="pt-2">no items yet</p>
             </div>
           </div>
-          <div className="relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 bg-white transition-all duration-500">
+          <div
+            className={`relative flex flex-col items-center w-[272px] font-medium border border-gray-300 rounded-lg px-4 text-sidebar-textprimary transition-all duration-500 ${
+              isOpenSubMenu.offer ? "pb-[15px]" : ""
+            }`}
+          >
             <button
-              className="flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer"
-              onClick={toggleSubMenu}
+              className={`flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer ${
+                isOpenSubMenu.offer ? "border-b" : ""
+              }`}
+              onClick={() => toggleSubMenu("offer")}
             >
               <div className="flex items-center gap-3">
                 <svg
@@ -221,7 +230,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
               <svg
                 className={`transition-transform duration-500 ${
-                  isOpenSubMenu ? "rotate-180" : ""
+                  isOpenSubMenu.offer ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -237,16 +246,22 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </button>
             <div
               className={`overflow-hidden transition-all duration-500 ${
-                isOpenSubMenu ? "h-auto" : "h-0"
+                isOpenSubMenu.offer ? "h-auto" : "h-0"
               }`}
             >
               <p className="pt-2">no items yet</p>
             </div>
           </div>
-          <div className="relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 bg-white transition-all duration-500">
+          <div
+            className={`relative flex flex-col items-center w-[272px] font-medium border border-gray-300 rounded-lg px-4 text-sidebar-textprimary transition-all duration-500 ${
+              isOpenSubMenu.performer ? "pb-[15px]" : ""
+            }`}
+          >
             <button
-              className="flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer"
-              onClick={toggleSubMenu}
+              className={`flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer ${
+                isOpenSubMenu.performer ? "border-b" : ""
+              }`}
+              onClick={() => toggleSubMenu("performer")}
             >
               <div className="flex items-center gap-3">
                 <svg
@@ -265,7 +280,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
               <svg
                 className={`transition-transform duration-500 ${
-                  isOpenSubMenu ? "rotate-180" : ""
+                  isOpenSubMenu.performer ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -281,16 +296,22 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </button>
             <div
               className={`overflow-hidden transition-all duration-500 ${
-                isOpenSubMenu ? "h-auto" : "h-0"
+                isOpenSubMenu.performer ? "h-auto" : "h-0"
               }`}
             >
               <p className="pt-2">no items yet</p>
             </div>
           </div>
-          <div className="relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 bg-white transition-all duration-500">
+          <div
+            className={`relative flex flex-col items-center w-[272px] font-medium border border-gray-300 rounded-lg px-4 text-sidebar-textprimary transition-all duration-500 ${
+              isOpenSubMenu.myContact ? "pb-[15px]" : ""
+            }`}
+          >
             <button
-              className="flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer"
-              onClick={toggleSubMenu}
+              className={`flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer ${
+                isOpenSubMenu.myContact ? "border-b" : ""
+              }`}
+              onClick={() => toggleSubMenu("myContact")}
             >
               <div className="flex items-center gap-3">
                 <svg
@@ -309,7 +330,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
               <svg
                 className={`transition-transform duration-500 ${
-                  isOpenSubMenu ? "rotate-180" : ""
+                  isOpenSubMenu.myContact ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -325,7 +346,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </button>
             <div
               className={`overflow-hidden transition-all duration-500 ${
-                isOpenSubMenu ? "h-auto" : "h-0"
+                isOpenSubMenu.myContact ? "h-auto" : "h-0"
               }`}
             >
               <p className="pt-2">no items yet</p>
@@ -337,10 +358,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <span className="text-gray-500 text-sm font-medium pb-2">
             Finance
           </span>
-          <div className="relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 bg-white transition-all duration-500">
+          <div
+            className={`relative flex flex-col items-center w-[272px] border border-gray-300 rounded-lg px-4 text-sidebar-textprimary font-medium transition-all duration-500 ${
+              isOpenSubMenu.myBalance ? "pb-[15px]" : ""
+            }`}
+          >
             <button
-              className="flex justify-between items-center w-[250px] h-14 px-4 py-[15px] text-primary cursor-pointer"
-              onClick={toggleSubMenu}
+              className={`flex justify-between items-center w-[250px] h-14 px-4 py-[15px] cursor-pointer ${
+                isOpenSubMenu.myBalance ? "border-b" : ""
+              }`}
+              onClick={() => toggleSubMenu("myBalance")}
             >
               <div className="flex items-center gap-3">
                 <svg
@@ -362,7 +389,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </div>
               <svg
                 className={`transition-transform duration-500 ${
-                  isOpenSubMenu ? "rotate-180" : ""
+                  isOpenSubMenu.myBalance ? "rotate-180" : ""
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -378,7 +405,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             </button>
             <div
               className={`overflow-hidden transition-all duration-500 ${
-                isOpenSubMenu ? "h-auto" : "h-0"
+                isOpenSubMenu.myBalance ? "h-auto" : "h-0"
               }`}
             >
               <p className="pt-2">no items yet</p>
@@ -390,7 +417,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <span className="text-gray-500 text-sm font-medium pb-2">
             System & Service
           </span>
-          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border border-gray-300 rounded-lg">
+          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border font-medium border-gray-300 rounded-lg">
             <div className="flex items-center gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -400,14 +427,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 fill="none"
               >
                 <path
-                  d="M5 17V10H7V17H5ZM11 17V10H13V17H11ZM2 21V19H22V21H2ZM17 17V10H19V17H17ZM2 8V6L12 1L22 6V8H2ZM6.45 6H17.55L12 3.25L6.45 6Z"
+                  d="M9.25001 22L8.85001 18.8C8.63335 18.7167 8.42918 18.6167 8.23751 18.5C8.04585 18.3833 7.85835 18.2583 7.67501 18.125L4.70001 19.375L1.95001 14.625L4.52501 12.675C4.50835 12.5583 4.50001 12.4458 4.50001 12.3375V11.6625C4.50001 11.5542 4.50835 11.4417 4.52501 11.325L1.95001 9.375L4.70001 4.625L7.67501 5.875C7.85835 5.74167 8.05001 5.61667 8.25001 5.5C8.45001 5.38333 8.65001 5.28333 8.85001 5.2L9.25001 2H14.75L15.15 5.2C15.3667 5.28333 15.5708 5.38333 15.7625 5.5C15.9542 5.61667 16.1417 5.74167 16.325 5.875L19.3 4.625L22.05 9.375L19.475 11.325C19.4917 11.4417 19.5 11.5542 19.5 11.6625V12.3375C19.5 12.4458 19.4833 12.5583 19.45 12.675L22.025 14.625L19.275 19.375L16.325 18.125C16.1417 18.2583 15.95 18.3833 15.75 18.5C15.55 18.6167 15.35 18.7167 15.15 18.8L14.75 22H9.25001ZM11 20H12.975L13.325 17.35C13.8417 17.2167 14.3208 17.0208 14.7625 16.7625C15.2042 16.5042 15.6083 16.1917 15.975 15.825L18.45 16.85L19.425 15.15L17.275 13.525C17.3583 13.2917 17.4167 13.0458 17.45 12.7875C17.4833 12.5292 17.5 12.2667 17.5 12C17.5 11.7333 17.4833 11.4708 17.45 11.2125C17.4167 10.9542 17.3583 10.7083 17.275 10.475L19.425 8.85L18.45 7.15L15.975 8.2C15.6083 7.81667 15.2042 7.49583 14.7625 7.2375C14.3208 6.97917 13.8417 6.78333 13.325 6.65L13 4H11.025L10.675 6.65C10.1583 6.78333 9.67918 6.97917 9.23751 7.2375C8.79585 7.49583 8.39168 7.80833 8.02501 8.175L5.55001 7.15L4.57501 8.85L6.72501 10.45C6.64168 10.7 6.58335 10.95 6.55001 11.2C6.51668 11.45 6.50001 11.7167 6.50001 12C6.50001 12.2667 6.51668 12.525 6.55001 12.775C6.58335 13.025 6.64168 13.275 6.72501 13.525L4.57501 15.15L5.55001 16.85L8.02501 15.8C8.39168 16.1833 8.79585 16.5042 9.23751 16.7625C9.67918 17.0208 10.1583 17.2167 10.675 17.35L11 20ZM12.05 15.5C13.0167 15.5 13.8417 15.1583 14.525 14.475C15.2083 13.7917 15.55 12.9667 15.55 12C15.55 11.0333 15.2083 10.2083 14.525 9.525C13.8417 8.84167 13.0167 8.5 12.05 8.5C11.0667 8.5 10.2375 8.84167 9.56251 9.525C8.88751 10.2083 8.55001 11.0333 8.55001 12C8.55001 12.9667 8.88751 13.7917 9.56251 14.475C10.2375 15.1583 11.0667 15.5 12.05 15.5Z"
                   fill="#343754"
                 />
               </svg>
               <span>Settings</span>
             </div>
           </button>
-          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border border-gray-300 rounded-lg">
+          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border font-medium border-gray-300 rounded-lg">
             <div className="flex items-center gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -417,14 +444,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 fill="none"
               >
                 <path
-                  d="M5 17V10H7V17H5ZM11 17V10H13V17H11ZM2 21V19H22V21H2ZM17 17V10H19V17H17ZM2 8V6L12 1L22 6V8H2ZM6.45 6H17.55L12 3.25L6.45 6Z"
+                  d="M11 21V19H19V11.9C19 9.95 18.3208 8.29583 16.9625 6.9375C15.6042 5.57917 13.95 4.9 12 4.9C10.05 4.9 8.39583 5.57917 7.0375 6.9375C5.67917 8.29583 5 9.95 5 11.9V18H4C3.45 18 2.97917 17.8042 2.5875 17.4125C2.19583 17.0208 2 16.55 2 16V14C2 13.65 2.0875 13.3208 2.2625 13.0125C2.4375 12.7042 2.68333 12.4583 3 12.275L3.075 10.95C3.20833 9.81667 3.5375 8.76667 4.0625 7.8C4.5875 6.83333 5.24583 5.99167 6.0375 5.275C6.82917 4.55833 7.7375 4 8.7625 3.6C9.7875 3.2 10.8667 3 12 3C13.1333 3 14.2083 3.2 15.225 3.6C16.2417 4 17.15 4.55417 17.95 5.2625C18.75 5.97083 19.4083 6.80833 19.925 7.775C20.4417 8.74167 20.775 9.79167 20.925 10.925L21 12.225C21.3167 12.375 21.5625 12.6 21.7375 12.9C21.9125 13.2 22 13.5167 22 13.85V16.15C22 16.4833 21.9125 16.8 21.7375 17.1C21.5625 17.4 21.3167 17.625 21 17.775V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H11ZM9 14C8.71667 14 8.47917 13.9042 8.2875 13.7125C8.09583 13.5208 8 13.2833 8 13C8 12.7167 8.09583 12.4792 8.2875 12.2875C8.47917 12.0958 8.71667 12 9 12C9.28333 12 9.52083 12.0958 9.7125 12.2875C9.90417 12.4792 10 12.7167 10 13C10 13.2833 9.90417 13.5208 9.7125 13.7125C9.52083 13.9042 9.28333 14 9 14ZM15 14C14.7167 14 14.4792 13.9042 14.2875 13.7125C14.0958 13.5208 14 13.2833 14 13C14 12.7167 14.0958 12.4792 14.2875 12.2875C14.4792 12.0958 14.7167 12 15 12C15.2833 12 15.5208 12.0958 15.7125 12.2875C15.9042 12.4792 16 12.7167 16 13C16 13.2833 15.9042 13.5208 15.7125 13.7125C15.5208 13.9042 15.2833 14 15 14ZM6.025 12.45C5.90833 10.6833 6.44167 9.16667 7.625 7.9C8.80833 6.63333 10.2833 6 12.05 6C13.5333 6 14.8375 6.47083 15.9625 7.4125C17.0875 8.35417 17.7667 9.55833 18 11.025C16.4833 11.0083 15.0875 10.6 13.8125 9.8C12.5375 9 11.5583 7.91667 10.875 6.55C10.6083 7.88333 10.0458 9.07083 9.1875 10.1125C8.32917 11.1542 7.275 11.9333 6.025 12.45Z"
                   fill="#343754"
                 />
               </svg>
               <span>Help with the site</span>
             </div>
           </button>
-          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border border-gray-300 rounded-lg">
+          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border font-medium border-gray-300 rounded-lg">
             <div className="flex items-center gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -434,14 +461,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 fill="none"
               >
                 <path
-                  d="M5 17V10H7V17H5ZM11 17V10H13V17H11ZM2 21V19H22V21H2ZM17 17V10H19V17H17ZM2 8V6L12 1L22 6V8H2ZM6.45 6H17.55L12 3.25L6.45 6Z"
+                  d="M5 21C4.45 21 3.97917 20.8042 3.5875 20.4125C3.19583 20.0208 3 19.55 3 19V5C3 4.45 3.19583 3.97917 3.5875 3.5875C3.97917 3.19583 4.45 3 5 3H16L21 8V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H5ZM5 19H19V9H15V5H5V19ZM7 17H17V15H7V17ZM7 9H12V7H7V9ZM7 13H17V11H7V13Z"
                   fill="#343754"
                 />
               </svg>
               <span>Our news</span>
             </div>
           </button>
-          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border border-gray-300 rounded-lg">
+          <button className="flex justify-between items-center w-[272px] h-14 px-4 py-[14px] text-primary cursor-pointer border font-medium border-gray-300 rounded-lg">
             <div className="flex items-center gap-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -451,7 +478,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 fill="none"
               >
                 <path
-                  d="M5 17V10H7V17H5ZM11 17V10H13V17H11ZM2 21V19H22V21H2ZM17 17V10H19V17H17ZM2 8V6L12 1L22 6V8H2ZM6.45 6H17.55L12 3.25L6.45 6Z"
+                  d="M4 23V21H20V23H4ZM4 3V1H20V3H4ZM12 13C12.8333 13 13.5417 12.7083 14.125 12.125C14.7083 11.5417 15 10.8333 15 10C15 9.16667 14.7083 8.45833 14.125 7.875C13.5417 7.29167 12.8333 7 12 7C11.1667 7 10.4583 7.29167 9.875 7.875C9.29167 8.45833 9 9.16667 9 10C9 10.8333 9.29167 11.5417 9.875 12.125C10.4583 12.7083 11.1667 13 12 13ZM4 20C3.45 20 2.97917 19.8042 2.5875 19.4125C2.19583 19.0208 2 18.55 2 18V6C2 5.45 2.19583 4.97917 2.5875 4.5875C2.97917 4.19583 3.45 4 4 4H20C20.55 4 21.0208 4.19583 21.4125 4.5875C21.8042 4.97917 22 5.45 22 6V18C22 18.55 21.8042 19.0208 21.4125 19.4125C21.0208 19.8042 20.55 20 20 20H4ZM5.75 18C6.5 17.0667 7.40833 16.3333 8.475 15.8C9.54167 15.2667 10.7167 15 12 15C13.2833 15 14.4583 15.2667 15.525 15.8C16.5917 16.3333 17.5 17.0667 18.25 18H20V6H4V18H5.75ZM8.7 18H15.3C14.8167 17.6667 14.2958 17.4167 13.7375 17.25C13.1792 17.0833 12.6 17 12 17C11.4 17 10.8208 17.0833 10.2625 17.25C9.70417 17.4167 9.18333 17.6667 8.7 18ZM12 11C11.7167 11 11.4792 10.9042 11.2875 10.7125C11.0958 10.5208 11 10.2833 11 10C11 9.71667 11.0958 9.47917 11.2875 9.2875C11.4792 9.09583 11.7167 9 12 9C12.2833 9 12.5208 9.09583 12.7125 9.2875C12.9042 9.47917 13 9.71667 13 10C13 10.2833 12.9042 10.5208 12.7125 10.7125C12.5208 10.9042 12.2833 11 12 11Z"
                   fill="#343754"
                 />
               </svg>
