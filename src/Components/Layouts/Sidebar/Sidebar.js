@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
 
-import avatar from "../../public/image/avatar.png";
+import avatar from "../../../../public/image/avatar.png";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [isOpenSubMenu, setIsOpenSubMenu] = useState({
