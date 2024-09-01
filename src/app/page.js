@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import Header from "@/Components/Layouts/Header/Header";
-import Main from "@/Components/Layouts/Main/Main";
-import Sidebar from "@/Components/Layouts/Sidebar/Sidebar";
+import Header from "@/Components/layouts/header/Header";
+import Main from "@/Components/layouts/main/Main";
+import Sidebar from "@/Components/layouts/sidebar/Sidebar";
  
 
 export default function Home() {
